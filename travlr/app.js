@@ -16,6 +16,9 @@ var app = express();
 // Database
 require('./app_api/models/db');
 
+//Env file
+require('dotenv').config();
+
 // view engine setup
 app.set('views', path.join(__dirname, 'app_server', 'views'));
 
