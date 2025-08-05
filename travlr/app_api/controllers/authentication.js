@@ -33,6 +33,37 @@ const register = async(req, res) => {
 	}
 };
 
+const login = (req, res) => {
+	//Ensure email and password are present in message
+	if (!req.body.email || !req.body.password) {
+		return res
+		.status(400)
+		.json({"message": "All fields required"});
+	}
+
+	//Pass authentication to passport module
+	passport.authenticate('local', (err, user, info) => {
+		if (err) {
+			return res
+			.status(404)
+			.json(err);
+		}
+
+		if (user) {
+			//generate token
+			const token = user.generateJWT();
+			res
+			.status(200)
+			.json({token});
+		} else {
+			res
+			.status(401)
+			.json(info);
+		}
+	})(req, res);
+};
+
 module.exports = {
-	register
+	register,
+	login
 };
